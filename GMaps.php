@@ -15,7 +15,7 @@
 
         $array = file("coords.dat");
 
-        for ($i = 0; $i < sizeof($array); $i++) {
+        for ($i = 0; $i < sizeof($array)/10; $i++) {
             $newArr[$i] = split(" ", $array[$i]);
             $allLats[$i] = $newArr[$i][0];
             $allLngs[$i] = str_replace("\n", "", $newArr[$i][1]);
@@ -46,12 +46,24 @@
         map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 13);
 <?
 
-        $minLng = $meanLng - 20*$varLng;
-        $maxLng = $meanLng + 20*$varLng;
-        $maxLat = $meanLat + 20*$varLat;
-        $minLat = $meanLat - 20*$varLat;
-
+   $minLng = $meanLng - 20*$varLng;
+   $maxLng = $meanLng + 20*$varLng;
+   $maxLat = $meanLat + 20*$varLat;
+   $minLat = $meanLat - 20*$varLat;
+   /*
+   $minLat = min($allLats);
+   $minLng = min($allLngs);
+ 
+   $maxLat = max($allLats);
+   $maxLng = max($allLngs);
+   */
+   $lngSpan = $maxLng - $minLng;
+   $latSpan = $maxLat - $minLat;
+   $binLngSpan = $lngSpan / $N;
+   $binLatSpan = $latSpan / $N;
 ?>
+// <? echo "latSpan: $latSpan"?>
+
         var polygon;
         polygon = new GPolygon([new GLatLng(<? echo $minLat.",".$minLng; ?>),
                                 new GLatLng(<? echo $minLat.",".$maxLng; ?>),
@@ -71,10 +83,19 @@
 
         $offset = 0.001;
         for ($i = 0; $i < sizeof($allLats); $i++) {
-            $x  = (float)$allLats[$i];
-            $xp = (float)$allLats[$i] + $offset;
-            $y  = (float)$allLngs[$i];
-            $yp = (float)$allLngs[$i] + $offset;
+	  /*
+            $x  = (float)$allLats[$i] - $offset/2;
+            $xp = (float)$allLats[$i] + $offset/2;
+            $y  = (float)$allLngs[$i] - $offset/2;
+            $yp = (float)$allLngs[$i] + $offset/2;
+	  */
+	$ybin = intval(($allLngs[$i] - $minLng) / $lngSpan * $N);
+	$xbin = intval(($allLats[$i] - $minLat) / $latSpan * $N);
+	$y = (float)$ybin * $binLngSpan + $minLng;
+	$x = (float)$xbin * $binLatSpan + $minLat;
+	$yp = $y + $binLngSpan;
+	$xp = $x + $binLatSpan;
+
 
 
 ?>
@@ -84,7 +105,7 @@
                             new GLatLng(<? echo $xp.",".$yp; ?>),
                             new GLatLng(<? echo $xp.",".$y; ?>),
                             new GLatLng(<? echo $x.",".$y; ?>)],
-                            "#f33f00", 5, 0, "#000000", 1.00);
+                            "#f33f00", 5, 0, "#000000", <? echo $ybin/$N ?>);
             map.addOverlay(polygon);
 <?
         }
