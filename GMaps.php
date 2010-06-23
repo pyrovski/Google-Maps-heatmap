@@ -85,29 +85,31 @@
 
         for ($i = 0; $i < ($N-1); $i++) {
             for ($j = 0; $j < ($N-1); $j++) {
-          //    $intensity = $freqArr[$i][$j] / $maxFreq;
-          //    if ($intensity >= 0.33) {
-          //        $colorDecimal = (string)(255 * $intensity / 0.33);
-          //        $colorHex     = base_convert($colorDecimal, 10, 16);
-          //        $color = "#";
-          //        $color .= (string)$colorHex;
-          //        $color .= "0000";
-          //    } else if ($intensity > 0.33 && $intensity <= 0.66 ) {
-          //        $colorDecimal = (string)(255 * ($intensity-0.33) / 0.33);
-          //        $colorHex     = base_convert($colorDecimal, 10, 16);
-          //        $color  = "#ff";
-          //        $color .= (string)$colorHex;
-          //        $color .= "00";
-          //    } else if ($intensity > 0.66) {
-          //        $colorDecimal = (string)(255 * ($intensity-0.66) / 0.33);
-          //        $colorHex     = base_convert($colorDecimal, 10, 16);
-          //        $color  = "#ffff";
-          //        $color .= (string)$colorHex;
-          //    }
-          //    echo $intensity;
-          //    echo $color;
-          //    echo $colorHex;
-          //    echo $colorDecimal;
+                /*
+                $intensity = $freqArr[$i][$j] / $maxFreq;
+                if ($intensity >= 0.33) {
+                    $colorDecimal = (int)(255 * $intensity / 0.33);
+                    $colorHex     = base_convert($colorDecimal, 10, 16);
+                    $color = "#";
+                    $color .= (string)$colorHex;
+                    $color .= "0000";
+                } else if ($intensity > 0.33 && $intensity <= 0.66 ) {
+                    $colorDecimal = (int)(255 * ($intensity-0.33) / 0.33);
+                    $colorHex     = base_convert($colorDecimal, 10, 16);
+                    $color  = "#ff";
+                    $color .= (string)$colorHex;
+                    $color .= "00";
+                } else if ($intensity > 0.66) {
+                    $colorDecimal = (int)(255 * ($intensity-0.66) / 0.33);
+                    $colorHex     = base_convert($colorDecimal, 10, 16);
+                    $color  = "#ffff";
+                    $color .= (string)$colorHex;
+                }
+                echo $intensity;
+                echo $colorDecimal;
+                echo $colorHex;
+                echo $color;
+                */
                 $color = "#ff0000";
 
 ?>
