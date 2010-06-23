@@ -44,6 +44,7 @@
                                 "#f33f00", 5, 0, "#ff0000", 0.10);
         map.addOverlay(polygon);
 
+
 <? 
         for ($i = 0; $i < sizeof($allLats); $i++) {
             $cntLat[$i] = 0;
