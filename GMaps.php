@@ -11,17 +11,8 @@
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
 
-        var xc;
-        var yc;
-        xc = 32.221667;
-        yc = -110.926389;
-
-        var offset;
-        offset = 0.01
-
-        map.setCenter(new GLatLng(xc, yc), 13);
-
 <? 
+
         $array = file("coords.dat");
 
         for ($i = 0; $i < sizeof($array); $i++) {
@@ -29,11 +20,37 @@
             $allLats[$i] = $newArr[$i][0];
             $allLngs[$i] = str_replace("\n", "", $newArr[$i][1]);
         }
-        $minLat = min($allLats);
-        $minLng = min($allLngs);
 
-        $maxLat = max($allLats);
-        $maxLng = max($allLngs);
+        $N = 25;
+        for ($i = 0; $i < $N; $i++) {
+            for ($j = 0; $j < $N; $j++) {
+                $freqArr[$i][$j] = 0;
+            }
+        }
+
+        $meanLat = array_sum($allLats) / sizeof($allLats);
+        $meanLng = array_sum($allLngs) / sizeof($allLngs);
+
+        $varLat = 0;
+        $varLng = 0;
+
+        for ($i = 0; $i < sizeof($allLats); $i++) {
+            $varLat += pow($allLats[$i]-$meanLat, 2);
+            $varLng += pow($allLngs[$i]-$meanLng, 2);
+        }
+
+        $varLat /= sizeof($allLats);
+        $varLng /= sizeof($allLngs);
+
+?>
+        map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 13);
+<?
+
+        $minLng = $meanLng - 20*$varLng;
+        $maxLng = $meanLng + 20*$varLng;
+        $maxLat = $meanLat + 20*$varLat;
+        $minLat = $meanLat - 20*$varLat;
+
 ?>
         var polygon;
         polygon = new GPolygon([new GLatLng(<? echo $minLat.",".$minLng; ?>),
@@ -50,6 +67,7 @@
             $cntLat[$i] = 0;
             $cntLng[$i] = 0;
         }
+
 
         $offset = 0.001;
         for ($i = 0; $i < sizeof($allLats); $i++) {
@@ -70,6 +88,7 @@
             map.addOverlay(polygon);
 <?
         }
+
 ?>
 
 
@@ -81,6 +100,10 @@
   </head>
   <body onload="initialize()" onunload="GUnload()">
     <div id="map_canvas" style="width: 95%; height: 95%"></div>
+
+<? echo $minLng." ".$maxLng."<br>"; ?>
+<? echo $minLat." ".$maxLat."<br>"; ?>
+<? echo $varLat." ".$varLng."<br>"; ?>
 
 
   </body>
