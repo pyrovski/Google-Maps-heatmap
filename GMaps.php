@@ -36,7 +36,7 @@
      $varLng /= sizeof($allLngs);
 
      ?>
-     map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 13);
+     map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 11);
      <?
 
      $minLng = $meanLng - 40*$varLat;
@@ -44,7 +44,7 @@
      $maxLat = $meanLat + 40*$varLat;
      $minLat = $meanLat - 40*$varLat;
 
-     $N = 35;
+     $N = 25;
      for ($i = 0; $i < ($N-1); $i++) {
        for ($j = 0; $j < ($N-1); $j++) {
 	 $freqArr[$i][$j] = 0;
@@ -136,13 +136,7 @@
 </script>
 </head>
 <body onload="initialize()" onunload="GUnload()">
-    <div id="map_canvas" style="width: 95%; height: 95%"></div>
-
-    <? echo $minLng." ".$maxLng."<br>"; ?>
-<? echo $minLat." ".$maxLat."<br>"; ?>
-<? echo $varLat." ".$varLng."<br>"; ?>
-<? echo $maxFreq; ?>
-
+    <div  id="map_canvas" style="width: 800px; height: 600px"></div>
 
 </body>
 </html>
