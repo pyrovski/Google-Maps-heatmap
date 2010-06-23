@@ -47,29 +47,33 @@
         $N = 35;
         for ($i = 0; $i < ($N-1); $i++) {
             for ($j = 0; $j < ($N-1); $j++) {
+                $freqArr[$i][$j] = 0;
                 $lowerLat[$i] = $minLat +     $i*($maxLat-$minLat)/$N;
                 $upperLat[$i] = $minLat + ($i+1)*($maxLat-$minLat)/$N;
 
                 $lowerLng[$j] = $minLng +     $j*($maxLng-$minLng)/$N;
                 $upperLng[$j] = $minLng + ($j+1)*($maxLng-$minLng)/$N;
-
-                $freqArr[$i][$j] = 0;
-
-                for ($k = 0; $k < sizeof($allLats); $k++) {
-                    if ($allLats[$k] < $upperLat[$i] && $allLats[$k] > $lowerLat[$i] &&
-                        $allLngs[$k] < $upperLng[$j] && $allLngs[$k] > $lowerLng[$j]) {
-                        $freqArr[$i][$j]++;
                     }
                 }
-            }
-        }
 
-        $maxFreq = max($freqArr[0]);
+   $lngSpan = $maxLng - $minLng;
+   $latSpan = $maxLat - $minLat;
+   $binLngSpan = $lngSpan / $N;
+   $binLatSpan = $latSpan / $N;
+
+for ($i = 0; $i < sizeof($allLats); $i++) {
+		  $ybin = intval(($allLngs[$i] - $minLng) / $lngSpan * $N);
+		  $xbin = intval(($allLats[$i] - $minLat) / $latSpan * $N);
+		  if($xbin < 0 or $xbin > $N - 1)
+		  continue;
+		  if($ybin < 0 or $ybin > $N - 1)
+		  continue;
+		  $freqArr[$xbin][$ybin]++;
+}
+
+        $maxFreq = 0;
         for ($i = 0; $i < ($N-1); $i++) {
-            $tmp = max($freqArr[$i]);
-            if ($tmp > $maxFreq) {
-                $maxFreq = $tmp;
-            }
+	    $maxFreq = max($maxFreq, max($freqArr[$i]));
         }
 
         for ($i = 0; $i < ($N-1); $i++) {
