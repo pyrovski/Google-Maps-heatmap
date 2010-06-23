@@ -12,7 +12,6 @@
         var map = new GMap2(document.getElementById("map_canvas"));
 
 <? 
-
         $array = file("coords.dat");
 
         for ($i = 0; $i < sizeof($array); $i++) {
@@ -21,12 +20,6 @@
             $allLngs[$i] = str_replace("\n", "", $newArr[$i][1]);
         }
 
-        $N = 25;
-        for ($i = 0; $i < $N; $i++) {
-            for ($j = 0; $j < $N; $j++) {
-                $freqArr[$i][$j] = 0;
-            }
-        }
 
         $meanLat = array_sum($allLats) / sizeof($allLats);
         $meanLng = array_sum($allLngs) / sizeof($allLngs);
@@ -46,8 +39,8 @@
         map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 13);
 <?
 
-        $minLng = $meanLng - 20*$varLng;
-        $maxLng = $meanLng + 20*$varLng;
+        $minLng = $meanLng - 20*$varLat;
+        $maxLng = $meanLng + 20*$varLat;
         $maxLat = $meanLat + 20*$varLat;
         $minLat = $meanLat - 20*$varLat;
 
@@ -58,17 +51,80 @@
                                 new GLatLng(<? echo $maxLat.",".$maxLng; ?>),
                                 new GLatLng(<? echo $maxLat.",".$minLng; ?>),
                                 new GLatLng(<? echo $minLat.",".$minLng; ?>)],
-                                "#f33f00", 5, 0, "#ff0000", 0.10);
+                                "#f33f00", 5, 0, "#0000ff", 0.10);
         map.addOverlay(polygon);
-
-
 <? 
-        for ($i = 0; $i < sizeof($allLats); $i++) {
-            $cntLat[$i] = 0;
-            $cntLng[$i] = 0;
+
+        $N = 35;
+        for ($i = 0; $i < ($N-1); $i++) {
+            for ($j = 0; $j < ($N-1); $j++) {
+                $lowerLat[$i] = $minLat +     $i*($maxLat-$minLat)/$N;
+                $upperLat[$i] = $minLat + ($i+1)*($maxLat-$minLat)/$N;
+
+                $lowerLng[$j] = $minLng +     $j*($maxLng-$minLng)/$N;
+                $upperLng[$j] = $minLng + ($j+1)*($maxLng-$minLng)/$N;
+
+                $freqArr[$i][$j] = 0;
+
+                for ($k = 0; $k < sizeof($allLats); $k++) {
+                    if ($allLats[$k] < $upperLat[$i] && $allLats[$k] > $lowerLat[$i] &&
+                        $allLngs[$k] < $upperLng[$j] && $allLngs[$k] > $lowerLng[$j]) {
+                        $freqArr[$i][$j]++;
+                    }
+                }
+            }
+        }
+
+        $maxFreq = max($freqArr[0]);
+        for ($i = 0; $i < ($N-1); $i++) {
+            $tmp = max($freqArr[$i]);
+            if ($tmp > $maxFreq) {
+                $maxFreq = $tmp;
+            }
+        }
+
+        for ($i = 0; $i < ($N-1); $i++) {
+            for ($j = 0; $j < ($N-1); $j++) {
+          //    $intensity = $freqArr[$i][$j] / $maxFreq;
+          //    if ($intensity >= 0.33) {
+          //        $colorDecimal = (string)(255 * $intensity / 0.33);
+          //        $colorHex     = base_convert($colorDecimal, 10, 16);
+          //        $color = "#";
+          //        $color .= (string)$colorHex;
+          //        $color .= "0000";
+          //    } else if ($intensity > 0.33 && $intensity <= 0.66 ) {
+          //        $colorDecimal = (string)(255 * ($intensity-0.33) / 0.33);
+          //        $colorHex     = base_convert($colorDecimal, 10, 16);
+          //        $color  = "#ff";
+          //        $color .= (string)$colorHex;
+          //        $color .= "00";
+          //    } else if ($intensity > 0.66) {
+          //        $colorDecimal = (string)(255 * ($intensity-0.66) / 0.33);
+          //        $colorHex     = base_convert($colorDecimal, 10, 16);
+          //        $color  = "#ffff";
+          //        $color .= (string)$colorHex;
+          //    }
+          //    echo $intensity;
+          //    echo $color;
+          //    echo $colorHex;
+          //    echo $colorDecimal;
+                $color = "#ff0000";
+
+?>
+                polygon = new GPolygon([
+                                new GLatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>),
+                                new GLatLng(<? echo $lowerLat[$i].",".$upperLng[$j]; ?>),
+                                new GLatLng(<? echo $upperLat[$i].",".$upperLng[$j]; ?>),
+                                new GLatLng(<? echo $upperLat[$i].",".$lowerLng[$j]; ?>),
+                                new GLatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>)],
+                                "#f33f00", 5, 0, <? echo '"'.$color.'"'; ?>, 0.8);
+                map.addOverlay(polygon);
+<?  
+            }
         }
 
 
+/*
         $offset = 0.001;
         for ($i = 0; $i < sizeof($allLats); $i++) {
             $x  = (float)$allLats[$i];
@@ -89,6 +145,7 @@
 <?
         }
 
+*/
 ?>
 
 
@@ -104,6 +161,7 @@
 <? echo $minLng." ".$maxLng."<br>"; ?>
 <? echo $minLat." ".$maxLat."<br>"; ?>
 <? echo $varLat." ".$varLng."<br>"; ?>
+<? echo $maxFreq; ?>
 
 
   </body>
