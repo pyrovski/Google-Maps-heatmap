@@ -21,9 +21,10 @@
             $allLngs[$i] = str_replace("\n", "", $newArr[$i][1]);
         }
 
-        $N = 25;
-        for ($i = 0; $i < $N; $i++) {
-            for ($j = 0; $j < $N; $j++) {
+        $Nx = 25;
+	$Ny = 25;
+        for ($i = 0; $i < $Nx; $i++) {
+            for ($j = 0; $j < $Ny; $j++) {
                 $freqArr[$i][$j] = 0;
             }
         }
@@ -59,10 +60,9 @@
    */
    $lngSpan = $maxLng - $minLng;
    $latSpan = $maxLat - $minLat;
-   $binLngSpan = $lngSpan / $N;
-   $binLatSpan = $latSpan / $N;
+   $binLngSpan = $lngSpan / $Ny;
+   $binLatSpan = $latSpan / $Nx;
 ?>
-// <? echo "latSpan: $latSpan"?>
 
         var polygon;
         polygon = new GPolygon([new GLatLng(<? echo $minLat.",".$minLng; ?>),
@@ -89,14 +89,16 @@
             $y  = (float)$allLngs[$i] - $offset/2;
             $yp = (float)$allLngs[$i] + $offset/2;
 	  */
-	$ybin = intval(($allLngs[$i] - $minLng) / $lngSpan * $N);
-	$xbin = intval(($allLats[$i] - $minLat) / $latSpan * $N);
-	$y = (float)$ybin * $binLngSpan + $minLng;
-	$x = (float)$xbin * $binLatSpan + $minLat;
-	$yp = $y + $binLngSpan;
-	$xp = $x + $binLatSpan;
-
-
+			  $ybin = intval(($allLngs[$i] - $minLng) / $lngSpan * $Ny);
+			  $xbin = intval(($allLats[$i] - $minLat) / $latSpan * $Nx);
+			  if($xbin < 0 or $xbin > $Nx - 1)
+				     continue;
+			if($ybin < 0 or $ybin > $Ny - 1)
+				   continue;
+			  $y = (float)$ybin * $binLngSpan + $minLng;
+			  $x = (float)$xbin * $binLatSpan + $minLat;
+			  $yp = $y + $binLngSpan;
+			  $xp = $x + $binLatSpan;
 
 ?>
             polygon = new GPolygon([
@@ -105,7 +107,7 @@
                             new GLatLng(<? echo $xp.",".$yp; ?>),
                             new GLatLng(<? echo $xp.",".$y; ?>),
                             new GLatLng(<? echo $x.",".$y; ?>)],
-                            "#f33f00", 5, 0, "#000000", <? echo $ybin/$N ?>);
+                            "#f33f00", 5, 0, "#000000", <? echo $ybin/($Ny-1) ?>);
             map.addOverlay(polygon);
 <?
         }
@@ -125,6 +127,10 @@
 <? echo $minLng." ".$maxLng."<br>"; ?>
 <? echo $minLat." ".$maxLat."<br>"; ?>
 <? echo $varLat." ".$varLng."<br>"; ?>
+<? echo "lngSpan: $lngSpan <br>"?>
+<? echo "latSpan: $latSpan <br>"?>
+<? echo "binLngSpan: $binLngSpan <br>"?>
+<? echo "binLatSpan: $binLatSpan <br>"?>
 
 
   </body>
