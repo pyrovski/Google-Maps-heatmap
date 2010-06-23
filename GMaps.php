@@ -44,17 +44,6 @@
         $maxLat = $meanLat + 20*$varLat;
         $minLat = $meanLat - 20*$varLat;
 
-?>
-        var polygon;
-        polygon = new GPolygon([new GLatLng(<? echo $minLat.",".$minLng; ?>),
-                                new GLatLng(<? echo $minLat.",".$maxLng; ?>),
-                                new GLatLng(<? echo $maxLat.",".$maxLng; ?>),
-                                new GLatLng(<? echo $maxLat.",".$minLng; ?>),
-                                new GLatLng(<? echo $minLat.",".$minLng; ?>)],
-                                "#f33f00", 5, 0, "#0000ff", 0.10);
-        map.addOverlay(polygon);
-<? 
-
         $N = 35;
         for ($i = 0; $i < ($N-1); $i++) {
             for ($j = 0; $j < ($N-1); $j++) {
@@ -85,32 +74,34 @@
 
         for ($i = 0; $i < ($N-1); $i++) {
             for ($j = 0; $j < ($N-1); $j++) {
-                /*
                 $intensity = $freqArr[$i][$j] / $maxFreq;
-                if ($intensity >= 0.33) {
+                if ($intensity <= 0.33) {
                     $colorDecimal = (int)(255 * $intensity / 0.33);
                     $colorHex     = base_convert($colorDecimal, 10, 16);
+                    if (strlen($colorHex) < 2) {
+                        $colorHex = "0".$colorHex;
+                    }
                     $color = "#";
                     $color .= (string)$colorHex;
                     $color .= "0000";
                 } else if ($intensity > 0.33 && $intensity <= 0.66 ) {
                     $colorDecimal = (int)(255 * ($intensity-0.33) / 0.33);
                     $colorHex     = base_convert($colorDecimal, 10, 16);
+                    if (strlen($colorHex) < 2) {
+                        $colorHex = "0".$colorHex;
+                    }
                     $color  = "#ff";
                     $color .= (string)$colorHex;
                     $color .= "00";
                 } else if ($intensity > 0.66) {
                     $colorDecimal = (int)(255 * ($intensity-0.66) / 0.33);
                     $colorHex     = base_convert($colorDecimal, 10, 16);
+                    if (strlen($colorHex) < 2) {
+                        $colorHex = "0".$colorHex;
+                    }
                     $color  = "#ffff";
                     $color .= (string)$colorHex;
                 }
-                echo $intensity;
-                echo $colorDecimal;
-                echo $colorHex;
-                echo $color;
-                */
-                $color = "#ff0000";
 
 ?>
                 polygon = new GPolygon([
