@@ -88,7 +88,7 @@
 	   $color = "#";
 	   $color .= (string)$colorHex;
 	   $color .= "0000";
-	 } else if ($intensity > 0.33 && $intensity <= 0.66 ) {
+	 } else if ($intensity <= 0.66 ) {
 	   $colorDecimal = (int)(255 * ($intensity-0.33) / 0.33);
 	   $colorHex     = base_convert($colorDecimal, 10, 16);
 	   if (strlen($colorHex) < 2) {
@@ -98,7 +98,7 @@
 	   $color .= (string)$colorHex;
 	   $color .= "00";
 	 } else if ($intensity > 0.66) {
-	   $colorDecimal = (int)(255 * ($intensity-0.66) / 0.33);
+	   $colorDecimal = (int)(255 * ($intensity-0.66) / 0.34);
 	   $colorHex     = base_convert($colorDecimal, 10, 16);
 	   if (strlen($colorHex) < 2) {
 	     $colorHex = "0".$colorHex;
@@ -108,7 +108,7 @@
 	 }
 
      if (strcmp($color, "#000000") == 0) {
-         $opacity = 0.0;
+       continue;
      } else {
          $opacity = 0.8;
      }
