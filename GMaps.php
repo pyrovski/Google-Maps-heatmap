@@ -39,10 +39,10 @@
      map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 13);
      <?
 
-     $minLng = $meanLng - 20*$varLat;
-     $maxLng = $meanLng + 20*$varLat;
-     $maxLat = $meanLat + 20*$varLat;
-     $minLat = $meanLat - 20*$varLat;
+     $minLng = $meanLng - 40*$varLat;
+     $maxLng = $meanLng + 40*$varLat;
+     $maxLat = $meanLat + 40*$varLat;
+     $minLat = $meanLat - 40*$varLat;
 
      $N = 35;
      for ($i = 0; $i < ($N-1); $i++) {
@@ -107,6 +107,12 @@
 	   $color .= (string)$colorHex;
 	 }
 
+     if (strcmp($color, "#000000") == 0) {
+         $opacity = 0.0;
+     } else {
+         $opacity = 0.8;
+     }
+
 	 ?>
 	 polygon = new GPolygon([
 				 new GLatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>),
@@ -114,35 +120,12 @@
 				 new GLatLng(<? echo $upperLat[$i].",".$upperLng[$j]; ?>),
 				 new GLatLng(<? echo $upperLat[$i].",".$lowerLng[$j]; ?>),
 				 new GLatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>)],
-                                "#f33f00", 5, 0, <? echo '"'.$color.'"'; ?>, 0.8);
+                                "#f33f00", 5, 0, <? echo '"'.$color.'", '.$opacity; ?>);
 	 map.addOverlay(polygon);
 	 <?  
        }
      }
 
-
-     /*
-      $offset = 0.001;
-      for ($i = 0; $i < sizeof($allLats); $i++) {
-      $x  = (float)$allLats[$i];
-      $xp = (float)$allLats[$i] + $offset;
-      $y  = (float)$allLngs[$i];
-      $yp = (float)$allLngs[$i] + $offset;
-
-
-      ?>
-      polygon = new GPolygon([
-      new GLatLng(<? echo $x.",".$y; ?>),
-      new GLatLng(<? echo $x.",".$yp; ?>),
-      new GLatLng(<? echo $xp.",".$yp; ?>),
-      new GLatLng(<? echo $xp.",".$y; ?>),
-      new GLatLng(<? echo $x.",".$y; ?>)],
-      "#f33f00", 5, 0, "#000000", 1.00);
-     map.addOverlay(polygon);
-     <?
-   }
-
-   */
    ?>
 
 
