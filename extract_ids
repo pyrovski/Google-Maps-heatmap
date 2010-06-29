@@ -1,0 +1,1 @@
+cat $1|egrep -o 'Case Number:</b> [[:digit:]]+'|cut -d' ' -f3

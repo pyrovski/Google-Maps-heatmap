@@ -1,0 +1,3 @@
+./extract_coords $1 > coords
+./extract_ids $1 > ids
+paste coords ids | sort
