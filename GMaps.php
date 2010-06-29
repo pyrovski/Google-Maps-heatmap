@@ -12,7 +12,7 @@
      var map = new GMap2(document.getElementById("map_canvas"));
 
      <? 
-     $array = file("coords.dat");
+     $array = file("coords_multi.dat");
 
      for ($i = 0; $i < sizeof($array); $i++) {
        $newArr[$i] = split(" ", $array[$i]);

@@ -1,1 +1,1 @@
-cat $1|grep var|egrep -io 'latlng\(([[:digit:]]+[.][[:digit:]]+,*.*)+\)'|sed -e 's/LatLng(//g' -e 's/)//g' -e 's/,/ /g'
+cat $@|grep var|egrep -io 'latlng\(([[:digit:]]+[.][[:digit:]]+,*.*)+\)'|sed -e 's/LatLng(//g' -e 's/)//g' -e 's/,/ /g'

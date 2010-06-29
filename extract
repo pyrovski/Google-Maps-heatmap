@@ -1,3 +1,4 @@
-./extract_coords $1 > coords
-./extract_ids $1 > ids
+#usage: extract <file 1> [file 2] ... [file n]
+./extract_coords $@ > coords
+./extract_ids $@ > ids
 paste coords ids | sort
