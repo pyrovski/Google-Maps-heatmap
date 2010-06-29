@@ -44,7 +44,11 @@
      $maxLat = $meanLat + 40*$varLat;
      $minLat = $meanLat - 40*$varLat;
 
+    if (isset($_GET['Resolution'])) {
+        $N = $_GET['Resolution'];
+    } else {
      $N = 25;
+    }
      for ($i = 0; $i < ($N-1); $i++) {
        for ($j = 0; $j < ($N-1); $j++) {
 	 $freqArr[$i][$j] = 0;
@@ -110,7 +114,11 @@
      if (strcmp($color, "#000000") == 0) {
        continue;
      } else {
+         if (isset($_GET['Opacity'])) {
+             $opacity = $_GET['Opacity'];
+        } else {
          $opacity = 0.8;
+        }
      }
 
 	 ?>
@@ -137,6 +145,13 @@
 </head>
 <body onload="initialize()" onunload="GUnload()">
     <div  id="map_canvas" style="width: 800px; height: 600px"></div>
+    <div>
+        <form name="input" action="GMaps.php" method="get">
+        Resolution: <input type="text" name="Resolution" value="<? echo $N; ?>"/>
+        Opacity: <input type="text" name="Opacity" value="<? echo $opacity; ?>" />
+        <input type="submit" value="Submit" />
+        </form>
+    </div>
 
 </body>
 </html>
