@@ -1,4 +1,4 @@
 #usage: extract <file 1> [file 2] ... [file n]
 ./extract_coords $@ > coords
 ./extract_ids $@ > ids
-paste coords ids | sort
+paste coords ids | sort | uniq
