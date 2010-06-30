@@ -14,6 +14,7 @@ date = []
 crime= []
 UID  = []
 
+# Convert space delimited columns into arrays
 f = open("tmp")
 eof = False
 while (eof == False):
@@ -31,6 +32,7 @@ while (eof == False):
         crime.append(line[3])
         UID.append(int(line[4]))
 
+        # Rearrange the date from m/dd/yyyy to yyyy-mm-dd so that MySQL is happy
         dateArr = line[2].split("/")
         date.append("%04s-%02s-%02s" % (dateArr[2], dateArr[0], dateArr[1]))
 
@@ -44,6 +46,7 @@ UID  = array(UID)
 system("rm show30")
 system("rm tmp")
 
+# Open a connection to MySQL
 db = MySQLdb.connect(\
         host="localhost",\
         user="GoogleHeatMap",\
@@ -54,6 +57,7 @@ c = db.cursor()
 for i in range(len(lat)):
     c.execute ("""
          SELECT UniqueID FROM TucsonCrime WHERE UniqueID=%s""", (str(UID[i])))
+    # If the row doesn't yet exist in the MySQL table...
     if c.fetchone() == None:
         c.execute ("""
              INSERT INTO TucsonCrime 
