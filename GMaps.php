@@ -165,7 +165,5 @@
         </form>
     </div>
 
-    <? echo $allLats[0], $allLngs[0]; ?>
-
 </body>
 </html>

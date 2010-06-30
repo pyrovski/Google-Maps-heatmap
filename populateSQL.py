@@ -4,7 +4,6 @@ from datetime import datetime
 from os import system
 from numpy import array
 
-
 system("rm show30")
 system("wget http://maps.azstarnet.com/crime/show30 > /dev/null")
 system("./extract show30 > tmp")
@@ -41,7 +40,6 @@ lng  = array(lng)
 date = array(date)
 crime= array(crime)
 UID  = array(UID)
-
 
 system("rm show30")
 system("rm tmp")
