@@ -1,0 +1,1 @@
+cat $@|egrep -o 'Occured:</b> ([[:digit:]]+/)+[[:digit:]]+'|cut -d' ' -f2

@@ -1,0 +1,1 @@
+cat $@|egrep -o 'latlng,".{3}"'|cut -d',' -f2|sed -e 's/"//g'
