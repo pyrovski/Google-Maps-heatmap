@@ -6,7 +6,7 @@ from numpy import array
 
 system("rm show30")
 system("wget http://maps.azstarnet.com/crime/show30 > /dev/null")
-system("./extract show30 > tmp")
+system("/home/tjarnold/public_html/GMaps/extract show30 > tmp")
 
 lat  = []
 lng  = []
@@ -54,6 +54,7 @@ db = MySQLdb.connect(\
         db="GoogleHeatMap")
 c = db.cursor()
 
+rowsAdded = 0
 for i in range(len(lat)):
     c.execute ("""
          SELECT UniqueID FROM TucsonCrime WHERE UniqueID=%s""", (str(UID[i])))
@@ -64,6 +65,8 @@ for i in range(len(lat)):
              (Latitude, Longitude, EventDate, UniqueID, CrimeType)
              VALUES (%s, %s, %s, %s, %s)""",\
                 (str(lat[i]), str(lng[i]), date[i], str(UID[i]), crime[i]))
+        rowsAdded += 1
 
 c.close ()
 db.close ()
+print "%4.0f rows added" % (rowsAdded)
