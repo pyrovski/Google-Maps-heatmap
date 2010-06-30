@@ -1,3 +1,4 @@
+<? require_once("/home/tjarnold/public_html/include/functions.inc"); ?>
 <!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,14 +13,25 @@
      var map = new GMap2(document.getElementById("map_canvas"));
 
      <? 
-     $array = file("coords_multi.dat");
+     if (!isset($db)) {
+         $db = dbConnect('localhost', 'GoogleHeatMap');
+         mysql_select_db('GoogleHeatMap');
+    }
 
-     for ($i = 0; $i < sizeof($array); $i++) {
-       $newArr[$i] = split(" ", $array[$i]);
-       $allLats[$i] = $newArr[$i][0];
-       $allLngs[$i] = str_replace("\n", "", $newArr[$i][1]);
-     }
-
+    $mainQuery = "select * from TucsonCrime;";
+    $mainResult = mysql_query($mainQuery);
+    if (!$mainResult) { echo "Error!"; } 
+    else {
+        if (isset($db)) { mysql_close($db); unset($db); }
+        if (mysql_num_rows($mainResult) > 0) {
+            $i = 0;
+            while ($row = mysql_fetch_assoc($mainResult)) {
+                $allLats[$i] = $row['Latitude'];
+                $allLngs[$i] = $row['Longitude'];
+                $i++;
+            }
+        }
+    }
 
      $meanLat = array_sum($allLats) / sizeof($allLats);
      $meanLng = array_sum($allLngs) / sizeof($allLngs);
@@ -152,6 +164,8 @@
         <input type="submit" value="Submit" />
         </form>
     </div>
+
+    <? echo $allLats[0], $allLngs[0]; ?>
 
 </body>
 </html>

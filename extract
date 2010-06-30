@@ -3,5 +3,5 @@
 ./extract_ids $@ > ids
 ./extract_dates $@ > dates
 ./extract_codes $@ > codes
-paste coords dates codes ids | sort | uniq
+paste -d " " coords dates codes ids | sort | uniq
 rm -f coords ids codes dates
