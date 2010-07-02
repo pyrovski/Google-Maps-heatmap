@@ -6,7 +6,7 @@ from numpy import array
 
 system("rm show30")
 system("wget http://maps.azstarnet.com/crime/show30 > /dev/null")
-system("/home/tjarnold/public_html/GMaps/extract show30 > tmp")
+system("./extract show30 > tmp")
 
 lat  = []
 lng  = []
