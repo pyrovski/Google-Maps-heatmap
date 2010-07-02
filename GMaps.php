@@ -8,8 +8,8 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
    <script type="text/javascript">
 
+var myPolygons = [];
    function initialize() {
-        var myPolygons = [];
 
      <? 
      if (!isset($db)) {
@@ -138,11 +138,10 @@
      }
 
 	 ?>
-     var boxCoords = [new google.maps.LatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>),
+     boxCoords = [new google.maps.LatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>),
                       new google.maps.LatLng(<? echo $lowerLat[$i].",".$upperLng[$j]; ?>),
                       new google.maps.LatLng(<? echo $upperLat[$i].",".$upperLng[$j]; ?>),
-                      new google.maps.LatLng(<? echo $upperLat[$i].",".$lowerLng[$j]; ?>),
-                      new google.maps.LatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>)];
+                      new google.maps.LatLng(<? echo $upperLat[$i].",".$lowerLng[$j]; ?>)];
 
 	 myPolygons[<? echo $overlayNum; ?>] = new google.maps.Polygon({
             paths: boxCoords,
@@ -150,8 +149,7 @@
             strokeOpacity: 0.0,
             strokeWeight: 0,
             fillColor: "<? echo $color; ?>",
-            fillOpacity: <? echo $opacity; ?>
-        });
+            fillOpacity: <? echo $opacity; ?>});
      myPolygons[<? echo $overlayNum; ?>].setMap(map);
 	 <?  
         $overlayNum++;
@@ -162,6 +160,14 @@
 
 
  }
+
+function changeOpacity(newOpacity) {
+<?
+    for ($i = 0; $i < $overlayNum; $i++) {
+?>      myPolygons[<? echo $i; ?>].setOptions({fillOpacity: newOpacity}); <?
+    }
+?>
+}
 
 </script>
 </head>
