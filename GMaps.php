@@ -5,12 +5,11 @@
    <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
    <title>Google Maps JavaScript API Example</title>
-   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=ABQIAAAA1i3A2AVMsUWXBX44vDLeLBRbHvJD7lrrzhX73ZhbfnOuHeGXeRRZOl_Zoq2b4PtNHMy0W3iqC-UF1Q" type="text/javascript"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
    <script type="text/javascript">
 
    function initialize() {
-   if (GBrowserIsCompatible()) {
-     var map = new GMap2(document.getElementById("map_canvas"));
+        var myPolygons = [];
 
      <? 
      if (!isset($db)) {
@@ -36,6 +35,13 @@
      $meanLat = array_sum($allLats) / sizeof($allLats);
      $meanLng = array_sum($allLngs) / sizeof($allLngs);
 
+    ?>
+     var myLatLng = new google.maps.LatLng(<? echo $meanLat; ?>, <? echo $meanLng; ?>);
+     var myOptions = {zoom: 11, center: myLatLng, mapTypeId: google.maps.MapTypeId.TERRAIN
+        };
+     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    <?
+
      $varLat = 0;
      $varLng = 0;
 
@@ -47,9 +53,6 @@
      $varLat /= sizeof($allLats);
      $varLng /= sizeof($allLngs);
 
-     ?>
-     map.setCenter(new GLatLng(<? echo $meanLat.",".$meanLng; ?>), 11);
-     <?
 
      $minLng = $meanLng - 40*$varLat;
      $maxLng = $meanLng + 40*$varLat;
@@ -92,6 +95,7 @@
        $maxFreq = max($maxFreq, max($freqArr[$i]));
      }
 
+    $overlayNum = 0;
      for ($i = 0; $i < $N; $i++) {
        for ($j = 0; $j < $N; $j++) {
 	 $intensity = $freqArr[$i][$j] / $maxFreq;
@@ -134,24 +138,30 @@
      }
 
 	 ?>
-	 polygon = new GPolygon([
-				 new GLatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>),
-				 new GLatLng(<? echo $lowerLat[$i].",".$upperLng[$j]; ?>),
-				 new GLatLng(<? echo $upperLat[$i].",".$upperLng[$j]; ?>),
-				 new GLatLng(<? echo $upperLat[$i].",".$lowerLng[$j]; ?>),
-				 new GLatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>)],
-                                "#f33f00", 5, 0, <? echo '"'.$color.'", '.$opacity; ?>);
-	 map.addOverlay(polygon);
+     var boxCoords = [new google.maps.LatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>),
+                      new google.maps.LatLng(<? echo $lowerLat[$i].",".$upperLng[$j]; ?>),
+                      new google.maps.LatLng(<? echo $upperLat[$i].",".$upperLng[$j]; ?>),
+                      new google.maps.LatLng(<? echo $upperLat[$i].",".$lowerLng[$j]; ?>),
+                      new google.maps.LatLng(<? echo $lowerLat[$i].",".$lowerLng[$j]; ?>)];
+
+	 myPolygons[<? echo $overlayNum; ?>] = new google.maps.Polygon({
+            paths: boxCoords,
+            strokeColor: "#000000",
+            strokeOpacity: 0.0,
+            strokeWeight: 0,
+            fillColor: "<? echo $color; ?>",
+            fillOpacity: <? echo $opacity; ?>
+        });
+     myPolygons[<? echo $overlayNum; ?>].setMap(map);
 	 <?  
+        $overlayNum++;
        }
      }
 
    ?>
 
 
-   map.setUIToDefault();
  }
-   }
 
 </script>
 </head>
@@ -160,7 +170,7 @@
     <div>
         <form name="input" action="GMaps.php" method="get">
         Resolution: <input type="text" name="Resolution" value="<? echo $N; ?>"/>
-        Opacity: <input type="text" name="Opacity" value="<? echo $opacity; ?>" />
+        Opacity: <input type="text" name="Opacity" value="<? echo $opacity; ?>" onChange="changeOpacity(this.value)" />
         <input type="submit" value="Submit" />
         </form>
     </div>
