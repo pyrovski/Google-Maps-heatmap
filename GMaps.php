@@ -9,6 +9,7 @@
    <script type="text/javascript">
 
 var myPolygons = [];
+var map;
    function initialize() {
 
      <? 
@@ -35,9 +36,26 @@ var myPolygons = [];
      $meanLat = array_sum($allLats) / sizeof($allLats);
      $meanLng = array_sum($allLngs) / sizeof($allLngs);
 
+    if (isset($_GET['Lat'])) {
+        $centerLat = $_GET['Lat'];
+    } else {
+        $centerLat = $meanLat;
+    }
+    if (isset($_GET['Lng'])) {
+        $centerLng = $_GET['Lng'];
+    } else {
+        $centerLng = $meanLng;
+    }
+    if (isset($_GET['Zoom'])) {
+        $initZoom = $_GET['Zoom'];
+    } else {
+        $initZoom = 11;
+    }
+
+
     ?>
-     var myLatLng = new google.maps.LatLng(<? echo $meanLat; ?>, <? echo $meanLng; ?>);
-     var myOptions = {zoom: 11, center: myLatLng, mapTypeId: google.maps.MapTypeId.TERRAIN
+     var myLatLng = new google.maps.LatLng(<? echo $centerLat; ?>, <? echo $centerLng; ?>);
+     var myOptions = {zoom: <? echo $initZoom; ?>, center: myLatLng, mapTypeId: google.maps.MapTypeId.TERRAIN
         };
      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     <?
@@ -52,7 +70,6 @@ var myPolygons = [];
 
      $varLat /= sizeof($allLats);
      $varLng /= sizeof($allLngs);
-
 
      $minLng = $meanLng - 40*$varLat;
      $maxLng = $meanLng + 40*$varLat;
@@ -169,15 +186,26 @@ function changeOpacity(newOpacity) {
 ?>
 }
 
+function changeResolution(newResolution, newOpacity) {
+    if (newResolution != <? echo $N; ?>) {
+        window.location.href="GMaps.php?Resolution="+newResolution+
+                            "&Opacity="+newOpacity+
+                            "&Lat="+map.getCenter().lat()+
+                            "&Lng="+map.getCenter().lng()+
+                            "&Zoom="+map.getZoom();
+    }
+}
+
 </script>
 </head>
 <body onload="initialize()" onunload="GUnload()">
     <div  id="map_canvas" style="width: 800px; height: 600px"></div>
     <div>
+
         <form name="input" action="GMaps.php" method="get">
-        Resolution: <input type="text" name="Resolution" value="<? echo $N; ?>"/>
-        Opacity: <input type="text" name="Opacity" value="<? echo $opacity; ?>" onChange="changeOpacity(this.value)" />
-        <input type="submit" value="Submit" />
+        Resolution: <input type="range" name="Resolution" min="1" max="100" step="5" value="<? echo $N; ?>" onChange="changeResolution(this.value, 
+                                                                                    getElementsByName('Opacity')[0].value)" />
+        Opacity: <input type="range" name="Opacity" min="0" max="1.0" step="0.01" value="<? echo $opacity; ?>" onChange="changeOpacity(this.value)" />
         </form>
     </div>
 
