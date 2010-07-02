@@ -28,14 +28,18 @@ var map;
             while ($row = mysql_fetch_assoc($mainResult)) {
                 $allLats[$i] = $row['Latitude'];
                 $allLngs[$i] = $row['Longitude'];
+		$allDates[$i] = $row['EventDate'];
                 $i++;
             }
         }
     }
+    
+    $minDate = min($allDates);
+    $maxDate = max($allDates);
 
-     $meanLat = array_sum($allLats) / sizeof($allLats);
-     $meanLng = array_sum($allLngs) / sizeof($allLngs);
-
+    $meanLat = array_sum($allLats) / sizeof($allLats);
+    $meanLng = array_sum($allLngs) / sizeof($allLngs);
+    
     if (isset($_GET['Lat'])) {
         $centerLat = $_GET['Lat'];
     } else {
