@@ -61,8 +61,8 @@
     } else {
      $N = 25;
     }
-     for ($i = 0; $i < $N); $i++) {
-       for ($j = 0; $j < $N); $j++) {
+     for ($i = 0; $i < $N; $i++) {
+       for ($j = 0; $j < $N; $j++) {
 	 $freqArr[$i][$j] = 0;
 	 $lowerLat[$i] = $minLat +     $i*($maxLat-$minLat)/$N;
 	 $upperLat[$i] = $minLat + ($i+1)*($maxLat-$minLat)/$N;
