@@ -61,8 +61,8 @@
     } else {
      $N = 25;
     }
-     for ($i = 0; $i < ($N-1); $i++) {
-       for ($j = 0; $j < ($N-1); $j++) {
+     for ($i = 0; $i < $N); $i++) {
+       for ($j = 0; $j < $N); $j++) {
 	 $freqArr[$i][$j] = 0;
 	 $lowerLat[$i] = $minLat +     $i*($maxLat-$minLat)/$N;
 	 $upperLat[$i] = $minLat + ($i+1)*($maxLat-$minLat)/$N;
@@ -88,12 +88,12 @@
      }
 
      $maxFreq = 0;
-     for ($i = 0; $i < ($N-1); $i++) {
+     for ($i = 0; $i < $N; $i++) {
        $maxFreq = max($maxFreq, max($freqArr[$i]));
      }
 
-     for ($i = 0; $i < ($N-1); $i++) {
-       for ($j = 0; $j < ($N-1); $j++) {
+     for ($i = 0; $i < $N; $i++) {
+       for ($j = 0; $j < $N; $j++) {
 	 $intensity = $freqArr[$i][$j] / $maxFreq;
 	 if ($intensity <= 0.33) {
 	   $colorDecimal = (int)(255 * $intensity / 0.33);
