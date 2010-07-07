@@ -181,7 +181,7 @@ var map;
    ?>
 
 
- }
+}
 
 function changeOpacity(newOpacity) {
 <?
@@ -201,21 +201,51 @@ function changeResolution(newResolution, newOpacity) {
     }
 }
 
+function addAddress() {
+    var geocoder = new google.maps.Geocoder();
+    var address = document.getElementById("address").value;
+    if (geocoder) {
+        geocoder.geocode({ 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location});
+            }
+        });
+    }
+}
 </script>
 </head>
 <body onload="initialize()" onunload="GUnload()">
-  <center>
-    <div  id="map_canvas" style="width: 800px; height: 600px"></div>
-    <div>
+    <div align=center>
+    <div style="margin-bottom: 10px;">
+        Location: <input type="text" name="address" 
+                         id="address"
+                         onChange="addAddress()"/>
+                  <input type="button" value="Drop Pin" onClick=addAddress()"/>
+    </div>
 
+    <div id="map_canvas" style="width: 800px; height: 600px"></div>
+    <div>
         <form name="input" action="GMaps.php" method="get">
-        Resolution: <input type="range" name="Resolution" min="1" max="100" step="5" value="<? echo $N; ?>" onChange="changeResolution(this.value, 
-                                                                                    getElementsByName('Opacity')[0].value)" />
-        Opacity: <input type="range" name="Opacity" min="0" max="1.0" step="0.01" value="<? echo $opacity; ?>" onChange="changeOpacity(this.value)" />
+        Resolution: <input type="range" name="Resolution" 
+                            min="1" max="100" step="5" 
+                            value="<? echo $N; ?>" 
+                            onMouseUp="changeResolution(
+                            this.value,getElementsByName('Opacity')[0].value)" />
+        Opacity: <input type="range" name="Opacity" 
+                            min="0" max="1.0" step="0.01" 
+                            value="<? echo $opacity; ?>" 
+                            onChange="changeOpacity(this.value)" />
         </form>
     </div>
-  <div  style="width: 800px">This map shows police incident density in Tucson over the period beginning <? echo $minDate ?> and ending <? echo $maxDate ?>.  Data is currently sourced from <a href="http://maps.azstarnet.com/crime/show30">the AZ Star website</a>, because the Tucson police department is reluctant to interface with the unwashed masses of the World Wide Web.</div>
+  <div style="width: 800px">This map shows police incident density in Tucson over 
+  the period beginning <? echo $minDate ?> and ending <? echo $maxDate ?>.  
+  Data is currently sourced from 
+  <a href="http://maps.azstarnet.com/crime/show30">the AZ Star website</a>, 
+  because the Tucson police department is reluctant to interface with the 
+  unwashed masses of the World Wide Web.</div>
 <br><br>
-</center>
+</div>
 </body>
 </html>
