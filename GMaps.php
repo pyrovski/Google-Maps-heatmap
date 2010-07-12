@@ -184,11 +184,9 @@ var map;
 }
 
 function changeOpacity(newOpacity) {
-<?
-    for ($i = 0; $i < $overlayNum; $i++) {
-?>      myPolygons[<? echo $i; ?>].setOptions({fillOpacity: newOpacity}); <?
-    }
-?>
+  for (i = 0; i < <? echo $overlayNum; ?>; i++) {
+    myPolygons[i].setOptions({fillOpacity: newOpacity});
+  }
 }
 
 function changeResolution(newResolution, newOpacity) {
