@@ -260,6 +260,7 @@ function initialize() {
 function killPolygons() {
     for (i = 0; i < overlayNum; i++) {
         myPolygons[i].setMap(null);
+        myPolygons[i] = null;
     }
 }
 
