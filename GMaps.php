@@ -342,7 +342,7 @@ function addAddress() {
     <div>
         <form name="input" action="GMaps.php" method="get">
         Resolution: <input type="range" name="Resolution" 
-                            min="1" max="100" step="5" 
+                            min="1" max="50" step="1" 
                             value="25" 
                             onChange="changeResolution(
                                 this.value,getElementsByName('Opacity')[0].value)" />
