@@ -41,6 +41,7 @@ var myMap;
 var opacity;
 var N;
 var overlayNum;
+var numEvents;
 
 function retrieveRows() {
 <? 
@@ -69,6 +70,7 @@ function retrieveRows() {
         }
     }
 ?>
+    numEvents = <? echo $i; ?>;
 }
 
 
@@ -186,9 +188,14 @@ function drawPolygons(N, newOpacity) {
 function initialize() {
     retrieveRows();
 
+    document.getElementById("numEvents").innerHTML = numEvents;
+
     var minDate = "<? echo min($allDates); ?>";
     var maxDate = "<? echo max($allDates); ?>";
     var numRows = <? echo $i; ?>;
+
+    document.getElementById("startDate").innerHTML = minDate;
+    document.getElementById("endDate").innerHTML   = maxDate;
 
     meanLat = <? echo array_sum($allLats) / sizeof($allLats); ?>;
     meanLng = <? echo array_sum($allLngs) / sizeof($allLngs); ?>;
@@ -311,8 +318,9 @@ function addAddress() {
         </form>
     </div>
   <div style="width: 800px">This map shows police incident density in Tucson,
-  showing  events over 
-  the period beginning  and ending .  
+  showing <div id="numEvents" style="display: inline;"> </div> events over 
+  the period beginning <div id="startDate" style="display: inline;"> </div>  
+  and ending <div id="endDate" style="display: inline;"> </div>.
   Data is currently sourced from 
   <a href="http://maps.azstarnet.com/crime/show30">the AZ Star website</a>, 
   because the Tucson police department is reluctant to interface with the 
