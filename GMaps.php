@@ -23,10 +23,10 @@ Array.prototype.min = function() {
     return min;
 }
 
-var myPolygons = [];
-var allLats    = [];
-var allLngs    = [];
-var allDates   = [];
+var myPolygons;
+var allLats;
+var allLngs;
+var allDates;
 var meanLat;
 var meanLng;
 var centerLat;
@@ -57,20 +57,54 @@ function retrieveRows() {
         if (mysql_num_rows($mainResult) > 0) {
             $i = 0;
             while ($row = mysql_fetch_assoc($mainResult)) {
-?>
-                allLats[<? echo $i; ?>]  = <? echo $row['Latitude'];  ?>;
-                allLngs[<? echo $i; ?>]  = <? echo $row['Longitude']; ?>;
-                allDates[<? echo $i; ?>] = <? echo $row['EventDate']; ?>;
-<?
                 $allLats[$i]  = $row['Latitude'];
                 $allLngs[$i]  = $row['Longitude'];
-		        $allDates[$i] = $row['EventDate'];
+                $allDates[$i] = $row['EventDate']; 
                 $i++;
             }
         }
+        $numEvents = $i;
+
+?>
+        allLats = new Array(
+<?
+            $i = 0;
+            while ($i < $numEvents) {
+                echo  "$allLats[$i]";
+                if ($i < $numEvents-1) {
+                    echo  ",";
+                } 
+                $i++;
+            }
+            ?>);
+
+        allLngs = new Array(
+<?
+            $i = 0;
+            while ($i < $numEvents) {
+                echo  "$allLngs[$i]";
+                if ($i < $numEvents-1) {
+                    echo  ",";
+                } 
+                $i++;
+            }
+            ?>);
+
+        allDates = new Array(
+<?
+            $i = 0;
+            while ($i < $numEvents) {
+                echo  "$allDates[$i]";
+                if ($i < $numEvents-1) {
+                    echo  ",";
+                } 
+                $i++;
+            }
+            ?>);
+<?
     }
 ?>
-    numEvents = <? echo $i; ?>;
+    numEvents = <? echo $numEvents; ?>;
 }
 
 
@@ -127,6 +161,7 @@ function drawPolygons(N, newOpacity) {
     var colorDecimal;
     var colorHex;
     var colorString;
+    myPolygons = new Array(N*N);
 
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
@@ -273,7 +308,6 @@ function changeOpacity(newOpacity) {
 function changeResolution(newResolution, newOpacity) {
     if (newResolution != N) {
         killPolygons();
-
         drawPolygons(newResolution, newOpacity);
     }
 }
@@ -310,7 +344,7 @@ function addAddress() {
         Resolution: <input type="range" name="Resolution" 
                             min="1" max="100" step="5" 
                             value="25" 
-                            onMouseUp="changeResolution(
+                            onChange="changeResolution(
                                 this.value,getElementsByName('Opacity')[0].value)" />
         Opacity: <input type="range" name="Opacity" 
                             min="0" max="1.0" step="0.01" 
