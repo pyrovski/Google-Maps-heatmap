@@ -38,6 +38,8 @@ var map;
     $minDate = min($allDates);
     $maxDate = max($allDates);
 
+    $numRows = $i;
+
     $meanLat = array_sum($allLats) / sizeof($allLats);
     $meanLng = array_sum($allLngs) / sizeof($allLngs);
     
@@ -239,8 +241,9 @@ function addAddress() {
                             onChange="changeOpacity(this.value)" />
         </form>
     </div>
-  <div style="width: 800px">This map shows police incident density in Tucson over 
-  the period beginning <? echo $minDate ?> and ending <? echo $maxDate ?>.  
+  <div style="width: 800px">This map shows police incident density in Tucson,
+  showing <? echo $numRows; ?> events over 
+  the period beginning <? echo $minDate; ?> and ending <? echo $maxDate; ?>.  
   Data is currently sourced from 
   <a href="http://maps.azstarnet.com/crime/show30">the AZ Star website</a>, 
   because the Tucson police department is reluctant to interface with the 
