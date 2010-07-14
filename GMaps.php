@@ -72,7 +72,7 @@ function retrieveRows() {
 }
 
 
-function drawPolygons(N) {
+function drawPolygons(N, newOpacity) {
     var lowerLat = [];
     var lowerLng = [];
     var upperLat = [];
@@ -157,7 +157,7 @@ function drawPolygons(N) {
                 if (isset($_GET['Opacity'])) { ?>
                     opacity = <? echo $_GET['Opacity']; ?>; <?
                 } else { ?>
-                    opacity = 0.8; <?
+                    opacity = newOpacity; <?
                 }
 ?>
             }
@@ -246,8 +246,7 @@ function initialize() {
     } 
 ?>
 
-    drawPolygons(N);
-
+    drawPolygons(N, 0.8);
 }
 
 
@@ -267,7 +266,7 @@ function changeResolution(newResolution, newOpacity) {
     if (newResolution != N) {
         killPolygons();
 
-        drawPolygons(newResolution);
+        drawPolygons(newResolution, newOpacity);
     }
 }
 
