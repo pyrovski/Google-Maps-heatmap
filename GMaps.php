@@ -353,9 +353,7 @@ function addAddress() {
   Data is currently sourced from 
   <a href="http://maps.azstarnet.com/crime/show30">the AZ Star website</a>, 
   because the Tucson police department is reluctant to provide us with usable
-  data.</div>
-
-  <div style="width: 800px">The code for this project can be found on
+  data. The source code for this project can be found on
   <a href="https://github.com/pyrovski/Google-Maps-heatmap">Github</a></div>.
 
 <br><br>
