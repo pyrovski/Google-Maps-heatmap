@@ -166,38 +166,32 @@ function drawPolygons(N, newOpacity) {
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             intensity = freqArr[i][j] / maxFreq;
-            if (intensity <= 0.33) {
-                colorDecimal = parseInt(255 * intensity / 0.33);
-                colorHex     = parseInt(colorDecimal, 10).toString(16);
-                if (colorHex.length < 2) colorHex = "0" + colorHex;
-                colorString  = "#";
-                colorString += colorHex;
-                colorString += "0000";
-            } else if (intensity <= 0.66) {
-                colorDecimal = parseInt(255 * (intensity-0.33) / 0.33);
-                colorHex     = parseInt(colorDecimal, 10).toString(16);
-                if (colorHex.length < 2) colorHex = "0" + colorHex;
-                colorString  = "#ff";
-                colorString += colorHex;
-                colorString += "00";
-            } else if (intensity > 0.66)  {
-                colorDecimal = parseInt(255 * (intensity-0.66) / 0.33);
-                colorHex     = parseInt(colorDecimal, 10).toString(16);
-                if (colorHex.length < 2) colorHex = "0" + colorHex;
-                colorString  = "#ffff";
-                colorString += colorHex;
-            }
-            if (colorString == "#000000") {
-                continue;
+            if (intensity == 0.000)  { continue;
+            } else if (intensity < 0.90) {
+                rPart = 255 - intensity*(255-128)
+                gPart = 248 - intensity*(248-0)
+                bPart = 220 - intensity*(220-0)
+                colorString = "#";
+                rHex = parseInt(rPart,10).toString(16);
+                if (rHex.length < 2) rHex = "0" + rHex;
+                colorString += rHex;
+
+                gHex = parseInt(gPart,10).toString(16);
+                if (gHex.length < 2) gHex = "0" + gHex;
+                colorString += gHex;
+
+                bHex = parseInt(bPart,10).toString(16);
+                if (bHex.length < 2) bHex = "0" + bHex;
+                colorString += bHex;
+
             } else {
-<?
-                if (isset($_GET['Opacity'])) { ?>
-                    opacity = <? echo $_GET['Opacity']; ?>; <?
-                } else { ?>
-                    opacity = newOpacity; <?
-                }
-?>
+                colorString  = "#800000";
             }
+  <?        if (isset($_GET['Opacity'])) { ?>
+                opacity = <? echo $_GET['Opacity']; ?>; <?
+            } else { ?>
+                opacity = newOpacity; <?
+            } ?>
             
             var boxCoords = [new google.maps.LatLng(lowerLat[i], lowerLng[j]),
                              new google.maps.LatLng(lowerLat[i], upperLng[j]),
@@ -342,7 +336,7 @@ function addAddress() {
     <div>
         <form name="input" action="GMaps.php" method="get">
         Resolution: <input type="range" name="Resolution" 
-                            min="1" max="50" step="1" 
+                            min="1" max="150" step="1" 
                             value="25" 
                             onChange="changeResolution(
                                 this.value,getElementsByName('Opacity')[0].value)" />
@@ -358,8 +352,12 @@ function addAddress() {
   and ending <div id="endDate" style="display: inline;"> </div>.
   Data is currently sourced from 
   <a href="http://maps.azstarnet.com/crime/show30">the AZ Star website</a>, 
-  because the Tucson police department is reluctant to interface with the 
-  unwashed masses of the World Wide Web.</div>
+  because the Tucson police department is reluctant to provide us with usable
+  data.</div>
+
+  <div style="width: 800px">The code for this project can be found on
+  <a href="https://github.com/pyrovski/Google-Maps-heatmap">Github</a></div>.
+
 <br><br>
 </div>
 </body>

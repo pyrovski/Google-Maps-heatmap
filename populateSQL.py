@@ -6,7 +6,7 @@ from numpy import array
 
 system("rm show30")
 system("wget http://maps.azstarnet.com/crime/show30 > /dev/null")
-system("./extract show30 > tmp")
+system("/home/tjarnold/public_html/GMaps/extract show30 > tmp")
 
 lat  = []
 lng  = []
@@ -27,14 +27,15 @@ while (eof == False):
         while spacesRemoved == False:
             try: line.remove('')
             except ValueError: spacesRemoved = True
-        lat.append(float(line[0]))
-        lng.append(float(line[1]))
-        crime.append(line[3])
-        UID.append(int(line[4]))
+        if len(line) == 5:
+            lat.append(float(line[0]))
+            lng.append(float(line[1]))
+            crime.append(line[3])
+            UID.append(int(line[4]))
 
-        # Rearrange the date from m/dd/yyyy to yyyy-mm-dd so that MySQL is happy
-        dateArr = line[2].split("/")
-        date.append("%04s-%02s-%02s" % (dateArr[2], dateArr[0], dateArr[1]))
+            # Rearrange the date from m/dd/yyyy to yyyy-mm-dd so that MySQL is happy
+            dateArr = line[2].split("/")
+            date.append("%04s-%02s-%02s" % (dateArr[2], dateArr[0], dateArr[1]))
 
 # Convert these to numpy arrays
 lat  = array(lat)
@@ -42,6 +43,8 @@ lng  = array(lng)
 date = array(date)
 crime= array(crime)
 UID  = array(UID)
+
+print lat, lng, date, crime, UID
 
 system("rm show30")
 system("rm tmp")

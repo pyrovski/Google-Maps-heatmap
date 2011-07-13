@@ -1,7 +1,7 @@
 #usage: extract <file 1> [file 2] ... [file n]
-./extract_coords $@ > coords
-./extract_ids $@ > ids
-./extract_dates $@ > dates
-./extract_codes $@ > codes
+/home/tjarnold/public_html/GMaps/extract_coords $@ > coords
+/home/tjarnold/public_html/GMaps/extract_ids $@ > ids
+/home/tjarnold/public_html/GMaps/extract_dates $@ > dates
+/home/tjarnold/public_html/GMaps/extract_codes $@ > codes
 paste -d " " coords dates codes ids | sort | uniq
 rm -f coords ids codes dates
